@@ -4,7 +4,7 @@ import { Token } from './types'
 
 const router: Router = Router()
 
-router.get('/api/tokens/:name/:address/:token', async (req, res) => {
+router.get('/api/index/tokens/:name/:address/:token', async (req, res) => {
   const { name, address, token } = req.params
   console.log('FindToken', name, address, token)
 
@@ -15,7 +15,7 @@ router.get('/api/tokens/:name/:address/:token', async (req, res) => {
   })
 })
 
-router.get('/api/tokens/:name/:address', async (req, res) => {
+router.get('/api/index/tokens/:name/:address', async (req, res) => {
   const { name, address } = req.params
   console.log('FindTokenList', name, address)
 
