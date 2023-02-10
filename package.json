@@ -5,6 +5,7 @@
   "main": "index.js",
   "license": "ISC",
   "scripts": {
+    "build": "tsc",
     "dev": "nodemon ./src/app.ts",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/*.ts'",
     "heroku": "env NODE_PATH=dist node dist/app.js",
