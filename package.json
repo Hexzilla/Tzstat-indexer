@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/reactomoss/tez-run-server.git"
+    "url": "https://github.com/reactomoss/Tzstat-Indexer.git"
   },
   "dependencies": {
     "axios": "^0.21.1",
