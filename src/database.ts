@@ -31,7 +31,7 @@ const models = {} as any
 const indexer = mongoose.model('indexer', IndexerSchema)
 indexer.createCollection()
 
-const entryCoin = mongoose.model('entrycoin', EntryCoinSchema);
+const entryCoin = mongoose.model('user_entrycoin', EntryCoinSchema);
 entryCoin.createCollection()
 
 export const initialize = async (contacts: Contract[]) => {
