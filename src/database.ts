@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { mongo } from 'mongoose'
 import { Contract, Token } from 'types'
 
 const IndexerSchema = new mongoose.Schema({
@@ -17,10 +17,22 @@ const TokenSchema = new mongoose.Schema<Token>({
 })
 TokenSchema.index({ address: 1, tokenId: 1 }, { unique: true })
 
+const EntryCoinSchema = new mongoose.Schema<Token>({
+  address: {
+    type: String,
+    index: true,
+    unique: true,
+  },
+  value: Number,
+})
+
 const models = {} as any
 
 const indexer = mongoose.model('indexer', IndexerSchema)
 indexer.createCollection()
+
+const entryCoin = mongoose.model('entrycoin', EntryCoinSchema);
+entryCoin.createCollection()
 
 export const initialize = async (contacts: Contract[]) => {
   for (let contract of contacts) {
@@ -63,4 +75,8 @@ export const findTokens = async (name: string, address: string) => {
     return models[name].find({ address, value: { $gt: 0 } })
   }
   return [];
+}
+
+export const updateEntryCoin = async (address: string, value: number) => {
+  return entryCoin.updateOne({ address }, { address, value }, { upsert: true });
 }

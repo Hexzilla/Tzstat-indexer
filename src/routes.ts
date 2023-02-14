@@ -27,4 +27,12 @@ router.get('/api/index/tokens/:name/:address', async (req, res) => {
   return res.json(result)
 })
 
+router.post('/api/index/tokens/entrycoin', async (req, res) => {
+  const { address, amount } = req.body
+  console.log('UpdateEntryCoin', address, amount)
+
+  await database.updateEntryCoin(address, amount)
+  return res.json({ success: true, address, amount })
+})
+
 export default router
