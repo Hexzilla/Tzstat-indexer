@@ -7,13 +7,13 @@ import session from 'express-session'
 import useragent from 'express-useragent'
 import errorhandler from 'errorhandler'
 import { connect } from 'mongoose'
+require('dotenv').config()
 import cors from './corss'
 import routes from './routes'
 import * as database from './database'
 import * as indexer from './indexer'
 import contracts from './config.json'
 
-require('dotenv').config()
 const isProduction = process.env.NODE_ENV === 'production'
 
 // Create global app object

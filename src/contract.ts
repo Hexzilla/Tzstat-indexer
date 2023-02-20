@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { TezosToolkit } from '@taquito/taquito'
 import { InMemorySigner } from '@taquito/signer'
 
