@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import * as database from './database'
+import * as contract from './contract'
 import { Token } from './types'
 
 const router: Router = Router()
@@ -33,6 +34,14 @@ router.post('/api/index/tokens/entrycoin', async (req, res) => {
 
   await database.updateEntryCoin(address, amount)
   return res.json({ success: true, address, amount })
+})
+
+router.post('/api/index/pixltez/airdrop/pixltez', async (req, res) => {
+  const { addresses, amount } = req.body
+  console.log('AirdropPixltez', addresses, amount)
+
+  const success = await contract.airdropPixltez(addresses, amount)
+  return res.json({ success })
 })
 
 export default router
