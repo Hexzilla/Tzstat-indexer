@@ -14,7 +14,7 @@ export const airdropPixltez = async (addresses: string[], amount: number) => {
     const params = addresses.map((address) => {
       return {
         owner: address,
-        amount: (amount * 100).toString(),
+        amount: amount.toString(),
         token_id: tokenId,
       }
     })
