@@ -11,8 +11,8 @@ router.get('/api/index/tokens/:name/:address/:token', async (req, res) => {
 
   const result = await database.findToken(name, address, token)
   return res.json({
-    tokenId: result.tokenId,
-    value: result.value,
+    tokenId: token,
+    value: result ? result.value : 0,
   })
 })
 
@@ -21,11 +21,15 @@ router.get('/api/index/tokens/:name/:address', async (req, res) => {
   console.log('FindTokenList', name, address)
 
   const tokens = await database.findTokens(name, address)
-  const result = tokens.map((i: Token) => ({
-    tokenId: i.tokenId,
-    value: i.value,
-  }))
-  return res.json(result)
+  if (tokens) {
+    const result = tokens.map((i: Token) => ({
+      tokenId: i.tokenId,
+      value: i.value,
+    }))
+    return res.json(result)
+  } else {
+    return res.json([])
+  }
 })
 
 router.post('/api/index/tokens/entrycoin', async (req, res) => {
