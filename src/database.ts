@@ -27,13 +27,9 @@ const EntryCoinSchema = new mongoose.Schema<Token>({
 })
 
 const MeltingSchema = new mongoose.Schema<Melting>({
-  email: {
-    type: String,
-    index: true,
-    unique: true,
-  },
+  email: String,
   amount: Number,
-})
+}, { timestamps: true })
 
 const models = {} as any
 
@@ -94,5 +90,5 @@ export const updateEntryCoin = async (address: string, value: number) => {
 }
 
 export const updateMeltingHome = async (email: string, amunt: number) => {
-  return melting.updateOne({ email }, { email, amunt }, { upsert: true });
+  await melting.create({ email, amunt });
 }

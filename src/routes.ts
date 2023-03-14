@@ -52,8 +52,8 @@ router.post('/api/index/melting', async (req, res) => {
   const { email, amount } = req.body
   console.log('Melting', email, amount)
 
-  const success = await database.updateMeltingHome(email, amount)
-  return res.json({ success })
+  await database.updateMeltingHome(email, amount)
+  return res.json({ success: true })
 })
 
 export default router
