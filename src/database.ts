@@ -1,5 +1,5 @@
-import mongoose, { mongo } from 'mongoose'
-import { Contract, Token } from 'types'
+import mongoose from 'mongoose'
+import { Contract, Token, Melting } from 'types'
 
 const IndexerSchema = new mongoose.Schema({
   name: {
@@ -26,6 +26,15 @@ const EntryCoinSchema = new mongoose.Schema<Token>({
   value: Number,
 })
 
+const MeltingSchema = new mongoose.Schema<Melting>({
+  email: {
+    type: String,
+    index: true,
+    unique: true,
+  },
+  amount: Number,
+})
+
 const models = {} as any
 
 const indexer = mongoose.model('indexer', IndexerSchema)
@@ -33,6 +42,9 @@ indexer.createCollection()
 
 const entryCoin = mongoose.model('user_entrycoin', EntryCoinSchema);
 entryCoin.createCollection()
+
+const melting = mongoose.model('melting_home', MeltingSchema);
+melting.createCollection()
 
 export const initialize = async (contacts: Contract[]) => {
   for (let contract of contacts) {
@@ -79,4 +91,8 @@ export const findTokens = async (name: string, address: string) => {
 
 export const updateEntryCoin = async (address: string, value: number) => {
   return entryCoin.updateOne({ address }, { address, value }, { upsert: true });
+}
+
+export const updateMeltingHome = async (email: string, amunt: number) => {
+  return melting.updateOne({ email }, { email, amunt }, { upsert: true });
 }

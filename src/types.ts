@@ -19,3 +19,8 @@ export type Task = {
   contract: Contract
   cursor: Cursor
 }
+
+export type Melting = {
+  email: string
+  amount: number
+}
