@@ -56,6 +56,11 @@ router.post('/api/index/melting', async (req, res) => {
   return res.json({ success: true })
 })
 
+router.get('/api/index/melting/ranking', async (req, res) => {
+  const ranking = await database.getMeltingRanking()
+  return res.json({ success: true, ranking })
+})
+
 router.post('/api/index/melting/score', async (req, res) => {
   const { address, score } = req.body
   console.log('MeltingScore', address, score)

@@ -123,6 +123,10 @@ export const updateMeltingHome = async (
   await meltingHome.create({ email, address, amount })
 }
 
+export const getMeltingRanking = async () => {
+  return await meltingRanking.find().sort({ score: -1 }).limit(10);
+}
+
 export const updateMeltingRanking = async (address: string, score: number) => {
   const ranking = await meltingRanking.findOne({ address })
   if (ranking) {
