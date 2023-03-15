@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { Contract, Token, Melting } from 'types'
+import { Contract, Token, Melting, MeltingRanking } from 'types'
 
 const IndexerSchema = new mongoose.Schema({
   name: {
@@ -26,26 +26,48 @@ const EntryCoinSchema = new mongoose.Schema<Token>({
   value: Number,
 })
 
-const MeltingSchema = new mongoose.Schema<Melting>({
-  email: String,
-  amount: Number,
-}, { timestamps: true })
+const MeltingSchema = new mongoose.Schema<Melting>(
+  {
+    email: String,
+    address: String,
+    amount: Number,
+  },
+  { timestamps: true }
+)
+
+const MeltingRankingSchema = new mongoose.Schema<MeltingRanking>(
+  {
+    address: {
+      type: String,
+      index: true,
+      unique: true,
+    },
+    score: Number,
+  },
+  { timestamps: true }
+)
 
 const models = {} as any
 
 const indexer = mongoose.model('indexer', IndexerSchema)
 indexer.createCollection()
 
-const entryCoin = mongoose.model('user_entrycoin', EntryCoinSchema);
+const entryCoin = mongoose.model<Token>('user_entrycoin', EntryCoinSchema)
 entryCoin.createCollection()
 
-const melting = mongoose.model('melting_home', MeltingSchema);
-melting.createCollection()
+const meltingHome = mongoose.model<Melting>('melting_home', MeltingSchema)
+meltingHome.createCollection()
+
+const meltingRanking = mongoose.model<MeltingRanking>(
+  'melting_ranking',
+  MeltingRankingSchema
+)
+meltingRanking.createCollection()
 
 export const initialize = async (contacts: Contract[]) => {
   for (let contract of contacts) {
     const name = contract.name
-    const model = mongoose.model(name, TokenSchema)
+    const model = mongoose.model<Token>(name, TokenSchema)
     await model.createCollection()
     console.log(`Collection ${name} is created!`)
     models[name] = model
@@ -71,24 +93,44 @@ export const updateTokens = async (name: string, tokens: Token[]) => {
   return models[name].bulkWrite(operations)
 }
 
-export const findToken = async (name: string, address: string, tokenId: string) => {
+export const findToken = async (
+  name: string,
+  address: string,
+  tokenId: string
+) => {
   if (models[name]) {
     return models[name].findOne({ address, tokenId, value: { $gt: 0 } })
   }
-  return {};
+  return {}
 }
 
 export const findTokens = async (name: string, address: string) => {
   if (models[name]) {
     return models[name].find({ address, value: { $gt: 0 } })
   }
-  return [];
+  return []
 }
 
 export const updateEntryCoin = async (address: string, value: number) => {
-  return entryCoin.updateOne({ address }, { address, value }, { upsert: true });
+  return entryCoin.updateOne({ address }, { address, value }, { upsert: true })
 }
 
-export const updateMeltingHome = async (email: string, amunt: number) => {
-  await melting.create({ email, amunt });
+export const updateMeltingHome = async (
+  email: string,
+  address: string,
+  amount: number
+) => {
+  await meltingHome.create({ email, address, amount })
+}
+
+export const updateMeltingRanking = async (address: string, score: number) => {
+  const ranking = await meltingRanking.findOne({ address })
+  if (ranking) {
+    score = Math.max(ranking.score, score)
+  }
+  return meltingRanking.updateOne(
+    { address },
+    { address, score },
+    { upsert: true }
+  )
 }

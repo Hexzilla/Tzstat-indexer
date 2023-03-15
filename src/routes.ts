@@ -49,10 +49,18 @@ router.post('/api/index/pixltez/airdrop/pixltez', async (req, res) => {
 })
 
 router.post('/api/index/melting', async (req, res) => {
-  const { email, amount } = req.body
+  const { email, address, amount } = req.body
   console.log('Melting', email, amount)
 
-  await database.updateMeltingHome(email, amount)
+  await database.updateMeltingHome(email, address, amount)
+  return res.json({ success: true })
+})
+
+router.post('/api/index/melting/score', async (req, res) => {
+  const { address, score } = req.body
+  console.log('MeltingScore', address, score)
+
+  await database.updateMeltingRanking(address, score)
   return res.json({ success: true })
 })
 

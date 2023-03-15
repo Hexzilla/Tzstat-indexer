@@ -22,5 +22,11 @@ export type Task = {
 
 export type Melting = {
   email: string
+  address: string
   amount: number
+}
+
+export type MeltingRanking = {
+  address: string
+  score: number
 }
